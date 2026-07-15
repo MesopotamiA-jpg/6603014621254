@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคิดเลขสุดมินิมอล</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+        }
+
+        .calculator {
+            background-color: #1e293b;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            width: 320px;
+        }
+
+        /* หน้าจอแสดงผล */
+        .display {
+            width: 100%;
+            height: 80px;
+            background-color: #0f172a;
+            border: none;
+            outline: none;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            color: #f8fafc;
+            font-size: 2rem;
+            text-align: right;
+            padding: 15px;
+            font-weight: 500;
+        }
+
+        /* ส่วนของปุ่ม */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #334155;
+            color: #f8fafc;
+        }
+
+        button:hover {
+            background-color: #475569;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* ปุ่มสีพิเศษ */
+        .operator {
+            background-color: #f97316;
+            color: #ffffff;
+        }
+
+        .operator:hover {
+            background-color: #ea580c;
+        }
+
+        .clear {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+
+        .clear:hover {
+            background-color: #dc2626;
+        }
+
+        .equal {
+            background-color: #22c55e;
+            color: #ffffff;
+            grid-column: span 2; /* ขยายขนาดปุ่มเครื่องหมายเท่ากับ */
+        }
+
+        .equal:hover {
+            background-color: #16a34a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <input type="text" class="display" id="display" readonly value="0">
+        
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="deleteLast()">DEL</button>
+            <button class="operator" onclick="appendValue('/')">÷</button>
+            <button class="operator" onclick="appendValue('*')">×</button>
+
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('-')">-</button>
+
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button onclick="appendValue('.')">.</button>
+
+            <button onclick="appendValue('0')">0</button>
+            <button class="equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        // ฟังก์ชันเพิ่มตัวเลขหรือเครื่องหมายลงหน้าจอ
+        function appendValue(val) {
+            if (display.value === '0' && val !== '.') {
+                display.value = val;
+            } else {
+                display.value += val;
+            }
+        }
+
+        // ฟังก์ชันล้างหน้าจอทั้งหมด (C)
+        function clearDisplay() {
+            display.value = '0';
+        }
+
+        // ฟังก์ชันลบตัวอักษรล่าสุดทีละตัว (DEL)
+        function deleteLast() {
+            if (display.value.length > 1) {
+                display.value = display.value.slice(0, -1);
+            } else {
+                display.value = '0';
+            }
+        }
+
+        // ฟังก์ชันคำนวณผลลัพธ์ (=)
+        function calculate() {
+            try {
+                // ใช้ eval() ในการคำนวณสูตรคณิตศาสตร์แบบง่าย
+                // ป้องกันกรณีใส่สูตรผิด เช่น "++" หรือ "5/*3"
+                const result = eval(display.value);
+                display.value = result;
+            } catch (error) {
+                display.value = 'Error';
+                setTimeout(() => {
+                    display.value = '0';
+                }, 1500); // แสดง Error เป็นเวลา 1.5 วินาทีแล้วรีเซ็ต
+            }
+        }
+    </script>
+
+</body>
+</html>
